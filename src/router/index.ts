@@ -14,6 +14,7 @@ import JiaozhuJillu                       from "../views/admin/JiaozhuJillu.vue"
 import Caipiao                            from "../views/Caipiao.vue";
 import FenPei                             from "../views/FenPei.vue";
 import WanFa                              from "../views/WanFa.vue";
+import Login                              from "../views/Login.vue";
 
 export default createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -70,6 +71,11 @@ export default createRouter({
             path: '/aboutme',
             name: 'aboutme',
             component: About,
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: Login,
         },
         {
             path: '/admin2023beire',

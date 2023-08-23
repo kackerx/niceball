@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Layout                from "@/components/Layout.vue";
-import { fetArticleContent } from "@/api/submit";
-import { ref }               from "vue";
+import Layout                  from "@/components/Layout.vue";
+import { fetchArticleContent } from "@/api/submit";
+import { ref }                 from "vue";
 
 interface IProps {
   cate: string
@@ -11,7 +11,7 @@ const props = defineProps<IProps>()
 
 let content = ref('')
 
-fetArticleContent(props.cate).then(res => {
+fetchArticleContent(props.cate).then(res => {
   content.value = res.content
 })
 </script>

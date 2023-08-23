@@ -1,19 +1,31 @@
-import { createApp } from 'vue'
+import { createApp }   from 'vue'
 import './style.css'
-import App           from './App.vue'
-import router        from "./router";
+import App             from './App.vue'
+import router          from "./router";
 import { createPinia } from "pinia";
 
 import 'vant/lib/index.css';
+import { checkLogin }  from "./api/submit";
+import { showDialog }  from "vant";
 
 router.beforeEach((to, from, next) => {
     if (to.path.includes('admin')) {
         const token = localStorage.getItem('token')
-        console.log(token)
-        return
-    }
+        if (token === null) {
+            next('/login')
+            return
+        }
 
-    next()
+        checkLogin(token).then(res => {
+            next()
+        }).catch(err => {
+            showDialog({ message: '请先进行登录!' }).then(R => {
+                next('/login')
+            })
+        })
+    } else {
+        next()
+    }
 })
 
 

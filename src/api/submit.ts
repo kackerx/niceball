@@ -37,6 +37,24 @@ export const getArticles = (cate: string, year: string, page_size: string, page_
     })
 }
 
-export const fetArticleContent = (cate: string) => {
-    return axios.get(`articles/${cate}`)
+export const fetchArticleContent = (cate: string) => {
+    return axios.get(`articles/${ cate }`)
+}
+
+export const checkLogin = (token: string) => {
+    const formData = new FormData();
+    formData.append('token', token);
+
+    return axios.post('check_login', formData, {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    })
+}
+
+export const login = (username: string, password: string) => {
+    return axios.post('login', {
+        username: username,
+        password: password
+    })
 }
