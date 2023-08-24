@@ -9,7 +9,7 @@ const res = '关于我们'
 </script>
 
 <template>
-  <Article :content="res" />
+  <Article cate="guanyu" />
 </template>
 
 <style scoped>

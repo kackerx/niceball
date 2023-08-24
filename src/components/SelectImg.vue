@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import { onMounted } from "vue";
+import { showToast } from "vant";
 
 interface IProps {
   data: IImgData[]
@@ -28,7 +29,7 @@ const getImg = (item: any, type: string) => {
 
 function handleClickImg(item: IImgData) {
   if (props.modelValue.length === 7) {
-    alert('最多选择7个')
+    showToast({ message: '最多只能选择7个' })
     return
   }
   props.modelValue.push(item)

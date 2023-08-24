@@ -1,7 +1,13 @@
 import axios from "./base";
 
 export const submit = (data: {}) => {
-    return axios.post('admin/jiaozhu', data)
+    return axios.post('articles', data,
+        {
+            headers: {
+                'Authorization': localStorage.getItem('token'),
+            },
+        }
+    )
 }
 
 export const upload = (file: any, title: string) => {
@@ -57,4 +63,18 @@ export const login = (username: string, password: string) => {
         username: username,
         password: password
     })
+}
+
+export const updateCate = (cate: string, content: string) => {
+    return axios.post('article_content/update',
+        {
+            id: cate,
+            content: content
+        },
+        {
+            headers: {
+                'Authorization': localStorage.getItem('token'),
+            },
+        }
+    )
 }

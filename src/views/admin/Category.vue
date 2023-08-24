@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
-import { Button }              from 'vant';
-import { ref }                 from "vue";
-import { fetchArticleContent } from "@/api/submit";
+import { Button, showDialog }              from 'vant';
+import { ref, watch }                      from "vue";
+import { fetchArticleContent, updateCate } from "@/api/submit";
 
 const value = ref('caipiao');
 const option1 = [
@@ -23,8 +23,24 @@ fetchArticleContent(value.value).then((res: any) => {
   content.value = res.content
 })
 
+watch(value, (nv) => {
+  fetchArticleContent(nv).then((res: any) => {
+    content.value = res.content
+  })
+})
+
 const handleClickBtn = () => {
-  console.log(value.value)
+  updateCate(value.value, content.value).then((res: any) => {
+    showDialog({
+      title: '提示',
+      message: '保存成功',
+    })
+  }).catch((err: any) => {
+    showDialog({
+      title: '提示',
+      message: '保存失败',
+    })
+  })
 }
 
 </script>
@@ -35,7 +51,8 @@ const handleClickBtn = () => {
       <option v-for="(item, i) in option1" :key="i" :value=item.value>{{ item.text }}</option>
     </select>
 
-    <textarea :value="content" placeholder="请输入栏目内容并提交..." class="border p-4 rounded-lg h-full text-slate-500"/>
+    <textarea placeholder="请输入栏目内容并提交..." v-model="content"
+              class="border p-4 rounded-lg h-full text-slate-500"/>
 
     <Button type="success" @click="handleClickBtn">保存</Button>
   </div>

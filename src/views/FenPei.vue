@@ -9,7 +9,7 @@ const res = '分配'
 </script>
 
 <template>
-  <Article :content="res" />
+  <Article cate="jiangjin" />
 </template>
 
 <style scoped>
