@@ -39,7 +39,7 @@ let title = ''
 <template>
   <div class="flex space-x-4 items-center mb-10">
     <span>图片标题</span>
-    <input type="text" v-model="title">
+    <input type="text" v-model="title" class="border border-[#5da67c] p-3 rounded-lg">
   </div>
 
   <div class="flex space-x-4 items-center">

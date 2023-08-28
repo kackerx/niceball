@@ -1,12 +1,10 @@
 <script setup lang="ts">
 
 import Layout                                 from "@/components/Layout.vue";
-import JiaoBallXianChang                      from "@/components/JiaoBallXianChang.vue";
-import { reactive, ref, watch, withDefaults } from "vue";
+import { reactive, ref, watch } from "vue";
 import { getImg }                             from "@/utils/utils";
 import { useRoute, useRouter }                from "vue-router";
 import { getArticles }                        from "@/api/submit";
-import { camelCase }                          from 'lodash';
 import { Pagination }                         from "vant";
 
 const router = useRouter()
@@ -22,7 +20,7 @@ interface ArticleData {
 
 let articleData = reactive<ArticleData[]>([])
 
-let year = new Date().getFullYear().toString()
+let year: any = new Date().getFullYear().toString()
 let pn = route.params.pn == '' ? ref(1) : ref(route.params.pn)
 let pc = ref(0)
 
@@ -32,15 +30,13 @@ getArticles('8', route.params.year, '10', route.params.pn).then((data: any) => {
   articleData.splice(0, articleData.length, ...data.list);
   pc.value = Math.ceil(data.total / 10)
   years.value = data.year
-  console.log('init get', articleData.length)
 })
 
 watch(pn, (pn) => {
   getArticles('8', route.params.year, '10', pn).then((data: any) => {
     articleData.splice(0, articleData.length, ...data.list);
-    console.log(articleData)
+    pc.value = Math.ceil(data.total / 10)
   })
-  console.log(route.params.year, pn)
   year = route.params.year || new Date().getFullYear().toString()
   router.push(`/jiaozhujilu/${ year }/${ pn }`)
 })
@@ -48,6 +44,7 @@ watch(pn, (pn) => {
 const handleClickJiluNav = (year: string) => {
   getArticles('8', year, '10', 1).then((data: any) => {
     articleData.splice(0, articleData.length, ...data.list);
+    pc.value = Math.ceil(data.total / 10)
   })
   router.push(`/jiaozhujilu/${ year }/1`)
 }

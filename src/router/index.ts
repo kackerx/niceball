@@ -15,6 +15,12 @@ import Caipiao                            from "../views/Caipiao.vue";
 import FenPei                             from "../views/FenPei.vue";
 import WanFa                              from "../views/WanFa.vue";
 import Login                              from "../views/Login.vue";
+import Waihao                             from "@/views/waifa/Waihao.vue";
+import Mabiao                             from "@/views/waifa/Mabiao.vue";
+import Pailie                             from "@/views/waifa/Pailie.vue";
+import Xiangchong                         from "@/views/waifa/Xiangchong.vue";
+import Women                              from "@/views/about/Women.vue";
+import Dongtai                            from "@/views/about/Dongtai.vue";
 
 export default createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -66,11 +72,47 @@ export default createRouter({
             path: '/wanfajieshao',
             name: 'wanfajieshao',
             component: WanFa,
+            redirect: '/wanfajieshao/waihao',
+            children: [
+                {
+                    path: 'waihao',
+                    name: 'waihao',
+                    component: Waihao
+                },
+                {
+                    path: 'mabiao',
+                    name: 'mabiao',
+                    component: Mabiao
+                },
+                {
+                    path: 'pailie',
+                    name: 'pailie',
+                    component: Pailie
+                },
+                {
+                    path: 'xiangchong',
+                    name: 'xiangchong',
+                    component: Xiangchong
+                },
+            ]
         },
         {
             path: '/aboutme',
             name: 'aboutme',
             component: About,
+            redirect: '/aboutme/women',
+            children: [
+                {
+                    path: 'women',
+                    name: 'women',
+                    component: Women
+                },
+                {
+                    path: 'dongtai',
+                    name: 'dongtai',
+                    component: Dongtai
+                },
+            ]
         },
         {
             path: '/login',

@@ -18,6 +18,7 @@ export const upload = (file: any, title: string) => {
     return axios.post('image/upload', formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
+            'Authorization': localStorage.getItem('token'),
         },
     })
     // .then(response => {
@@ -30,18 +31,20 @@ export const upload = (file: any, title: string) => {
     // });
 }
 
-export const getArticles = (cate: string, year: string, page_size: string, page_num: string) => {
-    if (page_num === '') page_num = '1'
-    if (year === '') year = new Date().getFullYear().toString();
-    return axios.get('articles', {
-        params: {
-            cate: cate,
-            year: year,
-            page_size: page_size,
-            page_num: page_num
-        }
-    })
-}
+export const getArticles =
+    (cate: string, year: any, page_size: string, page_num: any, isAdmin: number = 0) => {
+        if (page_num === '') page_num = '1'
+        if (year === '') year = new Date().getFullYear().toString();
+        return axios.get('articles', {
+            params: {
+                cate: cate,
+                year: year,
+                page_size: page_size,
+                page_num: page_num,
+                is_admin: isAdmin,
+            }
+        })
+    }
 
 export const fetchArticleContent = (cate: string) => {
     return axios.get(`articles/${ cate }`)
@@ -77,4 +80,20 @@ export const updateCate = (cate: string, content: string) => {
             },
         }
     )
+}
+
+export const deleteArticle = (id: string) => {
+    return axios.post(`articles/delete`, { id }, {
+        headers: {
+            'Authorization': localStorage.getItem('token'),
+        },
+    })
+}
+
+export const fetchToday = () => {
+    return axios.get('articles/today')
+}
+
+export const fetchTuku = () => {
+    return axios.get('imgs')
 }

@@ -3,5 +3,6 @@
 @tailwind utilities;
 
 body {
-  background-color: #e3e0ec
+  background-color: #e3e0ec;
+  font-family: 'Microsoft YaHei', "Hack Nerd Font Mono", sans-serif;
 }

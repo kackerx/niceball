@@ -24,7 +24,7 @@ const props = withDefaults(defineProps<IProps>(), {
     </slot>
   </main>
 
-  <Footer/>
+  <Footer />
 </template>
 
 <style scoped>

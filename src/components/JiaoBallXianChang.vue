@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
 import { getImg }                   from "@/utils/utils";
+import { fetchToday }               from "@/api/submit";
+import { showToast }                from "vant";
+import { data }                     from "autoprefixer";
 
 // interface IProps {
 //   len: number
@@ -10,41 +13,145 @@ import { getImg }                   from "@/utils/utils";
 //
 // const props = defineProps<IProps>()
 
-const nums = reactive([1, 2, 3, 4, 5, 6, 7])
+const shengxiaoMap: { [key: string]: any } =
+    {
+      '鼠': 'shu',
+      '牛': 'niu',
+      '虎': 'hu',
+      '兔': 'tu',
+      '龙': 'long',
+      '蛇': 'she',
+      '马': 'ma',
+      '羊': 'yang',
+      '猴': 'hou',
+      '鸡': 'ji',
+      '狗': 'gou'
+    }
+
+let nums = reactive<string[]>([])
 const xiaos = reactive(['she', 'zhu', 'long', 'hou', 'niu', 'shu', 'ma'])
 
 let index = 0
 
-const isAnimate = false
+let isAnimate = true
 
 const divNumsRef = ref()
 const divXiaosRef = ref()
+
+
+// let classObj = reactive({
+//   'opacity_zero': true
+// })
+
+const noAnimate = () => {
+  const div = divNumsRef.value
+  const div2 = divXiaosRef.value
+
+  // console.log('noan', div)
+  for (let i = 0; i < 7; i++) {
+    div.children[i].classList.add('opacity-100')
+    div2.children[i].classList.add('opacity-100')
+  }
+
+  // div.children.forEach((child: any) => {
+  //   child.classList.add('opacity-100')
+  // })
+}
+
+let intervalId = setInterval(() => {
+  console.log('noan')
+  if (!isAnimate) {
+    noAnimate()
+  }
+}, 300)
 
 onMounted(() => {
   const div = divNumsRef.value
   const div2 = divXiaosRef.value
 
+
+  // if (!isAnimate) {
+  //   // div.children.forEach((child: any) => {
+  //   //   child.classList.add('opacity-100')
+  //   // })
+  //   console.log('onm')
+  //   setTimeout(() => {
+  //     let c = div.children[index]
+  //     console.log(c)
+  //   }, 200)
+  // }
+
+  // let intervalId = setInterval(() => {
+  //   console.log('noan')
+  //   if (!isAnimate) {
+  //     noAnimate()
+  //   }
+  // }, 300)
+
   const id = setInterval(() => {
-    if (index == nums.length || isAnimate) {
+    let child = div.children[index]
+    let child2 = div2.children[index]
+
+    if (index == nums.length || !isAnimate) {
+      console.log('clear')
       clearInterval(id)
       return
     }
-    div.children[index].classList = ['animation']
-    div2.children[index].classList = ['animation']
+
+    child.classList.add('animation')
+    child.addEventListener('animationend', () => {
+      child.classList.add('opacity-100')
+    })
+
+    child2.classList.add('animation')
+    child2.addEventListener('animationend', () => {
+      child2.classList.add('opacity-100')
+    })
+
     index++
   }, 5000)
 })
 
+const t = new Date()
+const today = `${ t.getFullYear() }-${ t.getMonth() + 1 }-${ t.getDate() }`
+const tomorrow = `${ t.getFullYear() }-${ t.getMonth() + 1 }-${ t.getDate() + 1 }`
+
+fetchToday().then((res: any) => {
+  isAnimate = res.isTrans
+  // isAnimate = true
+  setTimeout(() => {
+    clearInterval(intervalId)
+  }, 5000)
+
+  let data: [] = res.data.diy_data.split(',')
+  let tema: string = res.data.diy_tema
+  nums.splice(0, nums.length, ...data, tema)
+
+  let shengxiao = res.data.diy_shengxiao.replace('--', ',').split(',').map((item: string, _: string) => {
+    return shengxiaoMap[item]
+  })
+
+  xiaos.splice(0, xiaos.length, ...shengxiao)
+
+
+}).catch((err) => {
+  showToast({ message: err.message })
+})
+
+// const animationEnd = () => {
+//   alert('end')
+// }
+
 </script>
 
 <template>
-<!--  <section class="py-4 px-16 bg-white rounded-lg flex flex-col space-y-6 items-center">-->
-  <div class="flex flex-col space-y-4 items-center">
+  <!--  <section class="py-4 px-16 bg-white rounded-lg flex flex-col space-y-6 items-center">-->
+  <div class="flex flex-col space-y-4 items-center font">
     <div class="flex text-xl text-text justify-between space-x-16">
       <span>新加坡天天彩</span>
-      <span>第<span class="text-red-500 font-semibold">207</span>期</span>
+      <span>第<span class="text-red-500 font-semibold font-bold">207</span>期</span>
       <span>本期开奖时间:
-      <span class="text-red-500 font-semibold">2023-07-26 20:00:00</span>
+      <span class="text-red-500 font-semibold">{{ today }} 20:05:00</span>
     </span>
     </div>
 
@@ -68,10 +175,10 @@ onMounted(() => {
 
     <div>
       下期开奖时间:
-      <span class="text-red-500 font-semibold">2023-07-26 20:00:00</span>
+      <span class="text-red-500 font-semibold">{{ tomorrow }} 20:05:00</span>
     </div>
   </div>
-<!--  </section>-->
+  <!--  </section>-->
 </template>
 
 <style scoped>
@@ -101,5 +208,13 @@ onMounted(() => {
 
 .animation {
   animation: fadeIn 10s;
+}
+
+.opacity_zero {
+  opacity: 0;
+}
+
+.font {
+  font-family: 'Microsoft YaHei', "Hack Nerd Font Mono", sans-serif;
 }
 </style>

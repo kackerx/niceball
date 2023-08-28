@@ -4,7 +4,7 @@ export default {
     theme: {
         extend: {
             colors: {
-                text: '#b7a7e5',
+                text: '#7563C6',
                 btnbg: '#8669d3',
             },
             gridTemplateColumns: {

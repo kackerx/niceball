@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { reactive }            from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useNavbarStore }      from "../store/navbar";
 
